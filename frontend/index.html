@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Attrition Forcasting</title>
+    <link rel="stylesheet" href="..\\static\style.css">
+    <script>
+        function runCell(cellIndex) {
+            fetch(`/run-cell/${cellIndex}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`output-${cellIndex}`).innerText = data.output;
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <h1 class="head">Workforce Attrition Forecasting</h1>
+
+    {% for i in range(total_cells) %}
+    <div class="container">
+        <button onclick="runCell({{ i }})" class="button">Run Cell {{ i }}</button>
+        <pre id="output-{{ i }}" class="output"></pre>
+    </div>
+    {% endfor %}
+
+</body>
+
+</html>
