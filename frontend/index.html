@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="..\\static\style.css">
     <script>
         function runCell(cellIndex) {
-            fetch(`/run-cell/${cellIndex}`)
+            fetch('https://your-flask-app.onrender.com/run-cell/' + cellIndex)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById(`output-${cellIndex}`).innerText = data.output;
                 });
         }
+
+
     </script>
 </head>
 
