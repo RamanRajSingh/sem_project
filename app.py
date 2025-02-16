@@ -5,20 +5,18 @@ import os
 
 app = Flask(__name__)
 
-# Load the notebook
-notebook_path = "index.ipynb"
+# Load and execute a specific cell from Jupyter Notebook
+notebook_path = "your_notebook.ipynb"
 
 def load_notebook():
     with open(notebook_path, "r", encoding="utf-8") as f:
         return nbformat.read(f, as_version=4)
 
-# Execute a specific cell by index
 def execute_cell(cell_index):
     notebook = load_notebook()
     executor = ExecutePreprocessor(timeout=600, kernel_name="python3")
-
-    # Execute only up to the requested cell
-    executed_cells = notebook.cells[1:cell_index + 2]
+    
+    executed_cells = notebook.cells[:cell_index + 1]
     notebook.cells = executed_cells
 
     try:
@@ -30,7 +28,6 @@ def execute_cell(cell_index):
                 output_text.append(output['text'])
             elif 'text/plain' in output.get('data', {}):
                 output_text.append(output['data']['text/plain'])
-            
         
         return "\n".join(output_text) if output_text else "No Output"
     
@@ -38,10 +35,8 @@ def execute_cell(cell_index):
         return f"Error executing cell {cell_index}: {str(e)}"
 
 @app.route("/")
-def index():
-    notebook = load_notebook()
-    total_cells = len(notebook.cells)
-    return render_template("index.html", total_cells=total_cells)
+def home():
+    return "Flask Server is Running!"
 
 @app.route("/run-cell/<int:cell_index>")
 def run_cell(cell_index):
